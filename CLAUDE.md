@@ -14,7 +14,8 @@ A library of reusable, customizable code snippets for Squarespace 7.1 sites (CSS
     - `snippet.js` must not contain `</script` anywhere (even in comments), or `install.html` would break; the build checks this.
     - Internal state attributes (e.g. `data-sp-open`, `data-sp-ready`) are not options.
 - `index.html` — gallery. Reads `snippets.json` and shows every demo in an iframe with a copy-code button.
-- `snippets.json` — generated list of all `meta.json` files. Run `node scripts/build-index.js` after adding or editing a snippet; it also regenerates every `install.html`. It refuses to write if `options` don't match the snippet files (unknown names, CSS defaults that differ, `:root` variables left out).
+- `snippets.json` — generated list of all `meta.json` files. Run `npm install` once, then `npm run build` (same as `node scripts/build-index.js`) after adding or editing a snippet; it also regenerates every `install.html`. It refuses to write if `options` don't match the snippet files (unknown names, CSS defaults that differ, `:root` variables left out), or if any `snippet.css` fails the LESS check (rule 9).
+- `scripts/less-check.js` — compiles each `snippet.css` with LESS 1.3.3, 1.4.2, 1.7.5 and 2.7.3 (dev dependencies in `package.json`). Squarespace doesn't publish its version, so the build checks a range and fails if any version errors or changes a value.
 - `_template/` — copy this to start a new snippet.
 
 ## Rules for every snippet
@@ -28,3 +29,10 @@ A library of reusable, customizable code snippets for Squarespace 7.1 sites (CSS
 6. **Responsive and accessible**: works at mobile width, keyboard focus visible, correct ARIA where relevant.
 7. Every snippet needs a `demo.html` and a `README.md` with: install steps, a customization table (variable, default, meaning), and known limitations.
 8. Keep snippets small and single-purpose.
+9. **No `calc()` with `var()` in any CSS meant for Custom CSS.** Squarespace compiles Custom CSS with an old LESS version that errors on it. Precompute values instead, or restructure:
+   - Offsets: `top: 100%; margin-top: var(--sp-x);` instead of `top: calc(100% + var(--sp-x))`.
+   - Scaled or negated movement: compose transforms, e.g. `rotate(-45deg) translateX(var(--sp-x)) rotate(45deg)` moves up-right.
+   - Avoid `calc()` without `var()` too: old LESS does the arithmetic itself, so `calc(100vw - 2rem)` becomes `calc(98vw)`. Use a plain value like `90vw`.
+   - Write shorthands that contain `/` (e.g. `mask: … center / contain`) as longhands. LESS 1.3 fails on them.
+   - Avoid LESS functions and syntax (`darken()`, `@variables`, `~"…"`): LESS evaluates them at compile time.
+   The build rejects any `calc(` in a `snippet.css`, and compiles every `snippet.css` with the old LESS versions above. Any error or changed value fails the build.

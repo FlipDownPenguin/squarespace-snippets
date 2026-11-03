@@ -1,6 +1,7 @@
 // Builds snippets.json from every snippets/*/meta.json, and checks each meta.json "options"
 // list against the snippet's files so the two can't drift apart.
 const fs = require('fs'), path = require('path');
+const { checkLess, VERSIONS } = require('./less-check');
 const dir = path.join(__dirname, '..', 'snippets');
 const FILES = ['snippet.css', 'snippet.js', 'snippet.html'];
 const TYPES = ['attribute', 'css-variable'];
@@ -47,6 +48,11 @@ function checkOptions(slug, meta, sources) {
     }
   });
 
+  // Squarespace compiles Custom CSS with old LESS, which errors on or rewrites calc().
+  css.split("\n").forEach(line => {
+    if (/calc\(/i.test(line)) fail(`snippet.css uses calc() (${line.trim()}). Old LESS in Squarespace Custom CSS breaks it; see CLAUDE.md rule 9`);
+  });
+
   meta.options.filter(o => o.on === SCRIPT_TAG).forEach(o => {
     if (o.type !== 'attribute') fail(`${o.name}: options on the ${SCRIPT_TAG} must be attributes`);
     if (!o.example) fail(`${o.name}: needs an "example" value for install.html`);
@@ -81,10 +87,20 @@ const list = fs.readdirSync(dir)
     return meta;
   });
 
-if (errors.length) {
-  console.error(`snippets.json not written. Fix these meta.json "options" problems:\n- ${errors.join('\n- ')}`);
-  process.exit(1);
-}
-installs.forEach(([file, html]) => fs.writeFileSync(file, html));
-fs.writeFileSync(path.join(__dirname, '..', 'snippets.json'), JSON.stringify(list, null, 2));
-console.log(`Indexed ${list.length} snippet(s), wrote ${installs.length} install.html file(s)`);
+(async () => {
+  // Compile every snippet.css with the old LESS versions Squarespace's Custom CSS may use.
+  for (const meta of list) {
+    if (!meta.files.includes('snippet.css')) continue;
+    const css = fs.readFileSync(path.join(dir, meta.slug, 'snippet.css'), 'utf8');
+    try { (await checkLess(css)).forEach(p => errors.push(`${meta.slug}: ${p}`)); }
+    catch (e) { errors.push(e.message); break; }
+  }
+
+  if (errors.length) {
+    console.error(`snippets.json not written. Fix these problems:\n- ${[...new Set(errors)].join('\n- ')}`);
+    process.exit(1);
+  }
+  installs.forEach(([file, html]) => fs.writeFileSync(file, html));
+  fs.writeFileSync(path.join(__dirname, '..', 'snippets.json'), JSON.stringify(list, null, 2));
+  console.log(`Indexed ${list.length} snippet(s), wrote ${installs.length} install.html file(s), CSS compiles unchanged with LESS ${VERSIONS.map(v => v.replace('less-', '')).join(', ')}`);
+})();

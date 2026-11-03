@@ -22,8 +22,15 @@
   width: var(--sp-icon-size);
   height: var(--sp-icon-size);
   background-color: currentColor; /* icon follows the button text color */
-  -webkit-mask: var(--sp-icon) center / contain no-repeat;
-          mask: var(--sp-icon) center / contain no-repeat;
+  /* Longhands, not the "mask:" shorthand: its "center / contain" breaks old LESS. */
+  -webkit-mask-image: var(--sp-icon);
+          mask-image: var(--sp-icon);
+  -webkit-mask-position: center;
+          mask-position: center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
   transition: transform 0.2s ease;
 }
 
@@ -44,10 +51,11 @@
   --sp-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E");
 }
 [data-sp-icon="download"] {
-  --sp-icon-move: translateY(calc(var(--sp-icon-nudge) * 0.6));
+  --sp-icon-move: translateY(var(--sp-icon-nudge));
   --sp-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4v11M7 11l5 5 5-5M5 20h14'/%3E%3C/svg%3E");
 }
 [data-sp-icon="external"] {
-  --sp-icon-move: translate(calc(var(--sp-icon-nudge) * 0.6), calc(var(--sp-icon-nudge) * -0.6));
+  /* Moves up-right by the nudge distance without calc(): turn, slide, turn back. */
+  --sp-icon-move: rotate(-45deg) translateX(var(--sp-icon-nudge)) rotate(45deg);
   --sp-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E");
 }

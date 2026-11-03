@@ -63,7 +63,7 @@
   margin: 0;
   padding: 0.35rem 0;
   min-width: var(--sp-dropdown-width);
-  max-width: calc(100vw - 2rem);
+  max-width: 90vw; /* keeps the menu inside the screen on phones */
   background: var(--sp-dropdown-bg);
   color: var(--sp-dropdown-color);
   border-radius: var(--sp-dropdown-radius);
@@ -73,7 +73,8 @@
 /* Only hide/position the menu once JS is running; without JS it shows as a plain list. */
 .sp-dropdown[data-sp-ready] .sp-dropdown__menu {
   position: absolute;
-  top: calc(100% + var(--sp-dropdown-offset));
+  top: 100%;
+  margin-top: var(--sp-dropdown-offset); /* gap below the button, without calc() */
   left: 0;
   z-index: var(--sp-dropdown-z);
   opacity: 0;

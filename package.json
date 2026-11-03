@@ -1,0 +1,14 @@
+{
+  "name": "squarespace-snippets",
+  "private": true,
+  "description": "Reusable CSS/JS snippets for Squarespace 7.1 sites, with a preview gallery.",
+  "scripts": {
+    "build": "node scripts/build-index.js"
+  },
+  "devDependencies": {
+    "less-1.3": "npm:less@1.3.3",
+    "less-1.4": "npm:less@1.4.2",
+    "less-1.7": "npm:less@1.7.5",
+    "less-2.7": "npm:less@2.7.3"
+  }
+}
