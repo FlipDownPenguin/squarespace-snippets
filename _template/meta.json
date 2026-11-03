@@ -4,5 +4,8 @@
   "description": "One-line description.",
   "tags": [],
   "requires": "css",
-  "install": "custom-css"
+  "install": "custom-css",
+  "options": [
+    { "name": "--sp-example-color", "type": "css-variable", "on": ":root", "default": "#111", "description": "Example color" }
+  ]
 }

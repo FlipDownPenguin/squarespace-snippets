@@ -2,15 +2,60 @@
   {
     "slug": "button-icons",
     "title": "Button Icons",
-    "description": "Add an arrow, plus, download, or external-link icon to any Squarespace button.",
+    "description": "Give each button its own arrow, plus, download, or external-link icon.",
     "tags": [
       "buttons",
       "icons"
     ],
-    "requires": "css",
-    "install": "custom-css",
+    "requires": "css+js",
+    "install": "code-injection",
+    "options": [
+      {
+        "name": "data-sp-buttons",
+        "type": "attribute",
+        "on": "<script> tag",
+        "default": null,
+        "required": true,
+        "description": "Which Squarespace buttons get which icon: \"button text or URL: icon\", comma separated. \"*: icon\" for all others, \"none\" to skip one."
+      },
+      {
+        "name": "data-sp-icon",
+        "type": "attribute",
+        "on": "a button you write in a Code Block",
+        "values": [
+          "arrow",
+          "plus",
+          "download",
+          "external"
+        ],
+        "default": null,
+        "description": "Icon for that button. Works without the script."
+      },
+      {
+        "name": "--sp-icon-size",
+        "type": "css-variable",
+        "on": ":root or one button",
+        "default": "1em",
+        "description": "Icon size"
+      },
+      {
+        "name": "--sp-icon-gap",
+        "type": "css-variable",
+        "on": ":root or one button",
+        "default": "0.5em",
+        "description": "Space between text and icon"
+      },
+      {
+        "name": "--sp-icon-nudge",
+        "type": "css-variable",
+        "on": ":root or one button",
+        "default": "0.25em",
+        "description": "How far the icon moves on hover"
+      }
+    ],
     "files": [
-      "snippet.css"
+      "snippet.css",
+      "snippet.js"
     ]
   },
   {
@@ -25,6 +70,114 @@
     ],
     "requires": "css+js",
     "install": "code-injection",
+    "options": [
+      {
+        "name": "data-sp-folders",
+        "type": "attribute",
+        "on": "<script> tag",
+        "default": null,
+        "required": true,
+        "description": "Which header folders to upgrade: folder titles or URL slugs, comma separated, or \"*\" for all."
+      },
+      {
+        "name": "--sp-folder-bg",
+        "type": "css-variable",
+        "on": ":root",
+        "default": null,
+        "description": "Menu background. Unset = your header's background."
+      },
+      {
+        "name": "--sp-folder-color",
+        "type": "css-variable",
+        "on": ":root",
+        "default": null,
+        "description": "Link color. Unset = your header's link color."
+      },
+      {
+        "name": "--sp-folder-hover-bg",
+        "type": "css-variable",
+        "on": ":root",
+        "default": "rgba(127, 127, 127, 0.12)",
+        "description": "Link hover and focus background"
+      },
+      {
+        "name": "--sp-folder-accent",
+        "type": "css-variable",
+        "on": ":root",
+        "default": "currentColor",
+        "description": "Focus outline color"
+      },
+      {
+        "name": "--sp-folder-radius",
+        "type": "css-variable",
+        "on": ":root",
+        "default": "8px",
+        "description": "Menu corner radius"
+      },
+      {
+        "name": "--sp-folder-shadow",
+        "type": "css-variable",
+        "on": ":root",
+        "default": "0 10px 30px rgba(0, 0, 0, 0.12)",
+        "description": "Menu shadow"
+      },
+      {
+        "name": "--sp-folder-padding",
+        "type": "css-variable",
+        "on": ":root",
+        "default": "0.4rem",
+        "description": "Space inside the menu edge"
+      },
+      {
+        "name": "--sp-folder-item-padding",
+        "type": "css-variable",
+        "on": ":root",
+        "default": "0.55em 0.9em",
+        "description": "Link padding"
+      },
+      {
+        "name": "--sp-folder-item-radius",
+        "type": "css-variable",
+        "on": ":root",
+        "default": "4px",
+        "description": "Link hover-highlight radius"
+      },
+      {
+        "name": "--sp-folder-min-width",
+        "type": "css-variable",
+        "on": ":root",
+        "default": "200px",
+        "description": "Minimum menu width"
+      },
+      {
+        "name": "--sp-folder-offset",
+        "type": "css-variable",
+        "on": ":root",
+        "default": "0.5rem",
+        "description": "Gap between the folder title and the menu"
+      },
+      {
+        "name": "--sp-folder-z",
+        "type": "css-variable",
+        "on": ":root",
+        "default": "1000",
+        "description": "Menu stacking order"
+      },
+      {
+        "name": "--sp-folder-speed",
+        "type": "css-variable",
+        "on": ":root",
+        "default": "0.18s",
+        "description": "Fade and slide time"
+      },
+      {
+        "name": "--sp-folder-close-delay",
+        "type": "css-variable",
+        "on": ":root",
+        "default": "250ms",
+        "description": "Wait before closing after the mouse leaves"
+      }
+    ],
     "files": [
       "snippet.css",
       "snippet.js"
@@ -41,6 +194,157 @@
     ],
     "requires": "css+js",
     "install": "code-block",
+    "options": [
+      {
+        "name": "data-sp-dropdown",
+        "type": "attribute",
+        "on": ".sp-dropdown",
+        "values": [
+          "",
+          "hover"
+        ],
+        "default": "",
+        "required": true,
+        "description": "Turns the dropdown on. Set to \"hover\" to also open on mouse hover."
+      },
+      {
+        "name": "data-sp-align",
+        "type": "attribute",
+        "on": ".sp-dropdown",
+        "values": [
+          "left",
+          "right"
+        ],
+        "default": "left",
+        "description": "Which edge of the button the menu lines up with."
+      },
+      {
+        "name": "--sp-dropdown-font",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "inherit",
+        "description": "Font family"
+      },
+      {
+        "name": "--sp-dropdown-font-size",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "1rem",
+        "description": "Base font size"
+      },
+      {
+        "name": "--sp-dropdown-toggle-bg",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "transparent",
+        "description": "Button background"
+      },
+      {
+        "name": "--sp-dropdown-toggle-color",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "currentColor",
+        "description": "Button text color"
+      },
+      {
+        "name": "--sp-dropdown-toggle-padding",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "0.6em 1em",
+        "description": "Button padding"
+      },
+      {
+        "name": "--sp-dropdown-toggle-radius",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "6px",
+        "description": "Button corner radius"
+      },
+      {
+        "name": "--sp-dropdown-toggle-border",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "1px solid currentColor",
+        "description": "Button border"
+      },
+      {
+        "name": "--sp-dropdown-bg",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "#fff",
+        "description": "Menu background"
+      },
+      {
+        "name": "--sp-dropdown-color",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "#161616",
+        "description": "Menu text color"
+      },
+      {
+        "name": "--sp-dropdown-hover-bg",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "#f2f2f2",
+        "description": "Link hover and focus background"
+      },
+      {
+        "name": "--sp-dropdown-accent",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "#161616",
+        "description": "Focus outline color"
+      },
+      {
+        "name": "--sp-dropdown-radius",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "8px",
+        "description": "Menu corner radius"
+      },
+      {
+        "name": "--sp-dropdown-shadow",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "0 10px 30px rgba(0, 0, 0, 0.12)",
+        "description": "Menu shadow"
+      },
+      {
+        "name": "--sp-dropdown-width",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "14rem",
+        "description": "Minimum menu width"
+      },
+      {
+        "name": "--sp-dropdown-offset",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "0.4rem",
+        "description": "Gap between button and menu"
+      },
+      {
+        "name": "--sp-dropdown-item-padding",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "0.6em 1em",
+        "description": "Link padding"
+      },
+      {
+        "name": "--sp-dropdown-z",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "1000",
+        "description": "Menu stacking order"
+      },
+      {
+        "name": "--sp-dropdown-speed",
+        "type": "css-variable",
+        "on": ":root or one .sp-dropdown",
+        "default": "0.18s",
+        "description": "Open and close animation time"
+      }
+    ],
     "files": [
       "snippet.css",
       "snippet.js",

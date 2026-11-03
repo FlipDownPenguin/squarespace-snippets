@@ -1,22 +1,51 @@
 # Button Icons
 
-Adds an icon (arrow, plus, download, external link) after the text of Squarespace buttons. The icon takes the button's text color automatically.
+Adds an icon (arrow, plus, download, external link) after a button's text, chosen **per button**. The icon takes the button's text color and moves slightly on hover and keyboard focus.
 
 ## Install
-1. Paste `snippet.css` into **Website → Pages → Custom CSS** (or Code Injection inside `<style>` tags).
-2. Wrap the buttons you want in a **Code Block** or section-level wrapper, OR in the Custom CSS add your own selector. The simplest route: add `sp-btn-icons sp-icon-arrow` as classes via a wrapper element around the button block.
+1. Paste `snippet.css` into **Website → Pages → Custom CSS**.
+2. Choose icons for your **Squarespace button blocks**. Go to **Settings → Advanced → Code Injection → Footer** (needs a Core plan or higher) and paste `snippet.js` inside this tag:
+   ```html
+   <script data-sp-buttons="Get started: arrow, Add to cart: plus, /brochure.pdf: download, https://partner.com: external">
+     /* paste snippet.js here */
+   </script>
+   ```
+3. Save and view the site in a new tab. The script doesn't run inside the editor.
+
+How `data-sp-buttons` works:
+- Each entry is `button text: icon` or `link URL: icon`, separated by commas. Matching is not case sensitive.
+- Match by text using the words you typed in the button block, not the uppercase style some themes apply. If the text contains a comma, match by its link URL instead.
+- URLs can be a path (`/contact`) or a full link (`https://…`), and must match the button's link exactly.
+- `*: arrow` gives every other button an arrow. `Learn more: none` leaves one out.
+- Buttons that aren't listed stay unchanged.
+
+**Buttons you write yourself** (in a Code Block) don't need the script. Add the attribute directly:
+```html
+<a class="your-button" href="/contact" data-sp-icon="arrow">Contact</a>
+```
 
 ## Customize
+Settings for each button:
+
+| Setting | Where | Values |
+|---|---|---|
+| `data-sp-buttons` | the `<script>` tag | `text or URL: icon`, comma separated |
+| `data-sp-icon` | a button you write yourself | `arrow`, `plus`, `download`, `external` |
+
+CSS variables, set on `:root` or on one button:
+
 | Variable | Default | Meaning |
 |---|---|---|
 | `--sp-icon-size` | `1em` | Icon size |
 | `--sp-icon-gap` | `0.5em` | Space between text and icon |
-| `--sp-icon-nudge` | `0.25em` | Hover slide distance |
-
-Icon classes: `sp-icon-arrow`, `sp-icon-plus`, `sp-icon-download`, `sp-icon-external`.
+| `--sp-icon-nudge` | `0.25em` | How far the icon moves on hover (the plus icon rotates instead) |
 
 ## Squarespace selectors used
-`.sqs-block-button-element`, `.sqs-button-element--primary`, `.sqs-button-element--secondary` — re-check if Squarespace changes button markup.
+`.sqs-block-button-element`, the link inside every Squarespace button block. Checked against a live 7.1 site in November 2026. Re-check it if icons stop appearing.
 
 ## Limitations
-Squarespace doesn't let you add classes directly to a button block, so a wrapper (or a section-ID selector in Custom CSS) is needed. TODO: add a small JS helper to tag buttons by their link text.
+- Squarespace doesn't let you add attributes to button blocks, so their icons need the Code Injection script, which needs a Core plan or higher. Without it, only buttons in Code Blocks can have icons.
+- Renaming a button or changing its link means updating `data-sp-buttons` to match.
+- The button becomes `inline-flex` so the icon lines up with the text. Check that very long button labels still wrap the way you want.
+- Header and announcement-bar buttons aren't Squarespace button blocks and are not matched.
+- **Changed from the earlier version:** the wrapper classes `sp-btn-icons` and `sp-icon-*` are gone. Use `data-sp-buttons` or `data-sp-icon` instead.
