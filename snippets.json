@@ -17,7 +17,7 @@
         "default": null,
         "required": true,
         "example": "Get started: arrow, Add to cart: plus, *: arrow",
-        "description": "Which Squarespace buttons get which icon: \"button text or URL: icon\", comma separated. \"*: icon\" for all others, \"none\" to skip one."
+        "description": "Which Squarespace buttons get which icon: \"button text or URL: icon\", comma separated. \"*: icon\" for all others, \"none\" to skip one. Add \"plain\" to leave a button out of button-styles."
       },
       {
         "name": "data-sp-icon",
@@ -66,6 +66,41 @@
       {
         "file": "install.html",
         "label": "Copy JS"
+      }
+    ]
+  },
+  {
+    "slug": "button-styles",
+    "title": "Button Styles",
+    "description": "Restyle every Primary, Secondary and Tertiary button: size, corners and hover effects, set in a configurator. Colors and fonts stay with Site Styles.",
+    "tags": [
+      "buttons",
+      "hover",
+      "global"
+    ],
+    "requires": "css",
+    "install": "custom-css",
+    "scope": "global",
+    "configurator": "configurator.html",
+    "options": [
+      {
+        "name": "data-sp-style",
+        "type": "attribute",
+        "on": "a Squarespace button (set by the button-icons script)",
+        "values": [
+          "plain"
+        ],
+        "default": null,
+        "description": "\"plain\" leaves that one button unstyled. Set it with the button-icons script, e.g. data-sp-buttons=\"Get started: plain\"."
+      }
+    ],
+    "files": [
+      "snippet.css"
+    ],
+    "copy": [
+      {
+        "file": "snippet.css",
+        "label": "Copy CSS"
       }
     ]
   },

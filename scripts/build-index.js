@@ -67,13 +67,32 @@ function checkOptions(slug, meta, sources) {
 }
 
 const installs = [];
+const generated = [];   // [file, contents] written only if every check passes
+const lessJobs = [];    // [slug, label, css] compiled with old LESS
 const list = fs.readdirSync(dir)
   .filter(d => fs.existsSync(path.join(dir, d, 'meta.json')))
   .map(d => {
     const meta = JSON.parse(fs.readFileSync(path.join(dir, d, 'meta.json'), 'utf8'));
-    meta.files = FILES.filter(f => fs.existsSync(path.join(dir, d, f)));
-    const sources = Object.fromEntries(meta.files.map(f => [f, fs.readFileSync(path.join(dir, d, f), 'utf8')]));
+
+    // Configurator snippets: snippet.css is generated from generator.js defaults.
+    const genFile = path.join(dir, d, 'generator.js');
+    let gen = null;
+    if (fs.existsSync(genFile)) {
+      gen = require(genFile);
+      generated.push([path.join(dir, d, 'snippet.css'), gen.generate(gen.defaults)]);
+      gen.samples().forEach(([label, cfg]) => lessJobs.push([d, `configurator output "${label}"`, gen.generate(cfg)]));
+    }
+    if (meta.configurator && !fs.existsSync(path.join(dir, d, meta.configurator))) errors.push(`${d}: meta.json names configurator "${meta.configurator}" but the file is missing`);
+
+    meta.files = FILES.filter(f => fs.existsSync(path.join(dir, d, f)) || (gen && f === 'snippet.css'));
+    const sources = Object.fromEntries(meta.files.map(f => [f, gen && f === 'snippet.css' ? generated[generated.length - 1][1] : fs.readFileSync(path.join(dir, d, f), 'utf8')]));
     checkOptions(d, meta, sources);
+    if (sources['snippet.css']) lessJobs.push([d, 'snippet.css', sources['snippet.css']]);
+
+    // Intentionally global snippets (CLAUDE.md rule 3) must let single buttons opt out.
+    if (meta.scope === 'global' && !/:not\(\[data-sp-style="plain"\]\)/.test(sources['snippet.css'] || '')) {
+      errors.push(`${d}: "scope": "global" snippets must skip elements with data-sp-style="plain" (CLAUDE.md rule 3)`);
+    }
 
     // What the gallery's copy buttons copy. JS is copied as the ready-to-paste install.html.
     let install = null;
@@ -88,11 +107,10 @@ const list = fs.readdirSync(dir)
   });
 
 (async () => {
-  // Compile every snippet.css with the old LESS versions Squarespace's Custom CSS may use.
-  for (const meta of list) {
-    if (!meta.files.includes('snippet.css')) continue;
-    const css = fs.readFileSync(path.join(dir, meta.slug, 'snippet.css'), 'utf8');
-    try { (await checkLess(css)).forEach(p => errors.push(`${meta.slug}: ${p}`)); }
+  // Compile every snippet.css (and every sample configurator output) with the old LESS
+  // versions Squarespace's Custom CSS may use.
+  for (const [slug, label, css] of lessJobs) {
+    try { (await checkLess(css)).forEach(p => errors.push(`${slug}: ${p.replace('snippet.css', label)}`)); }
     catch (e) { errors.push(e.message); break; }
   }
 
@@ -100,7 +118,8 @@ const list = fs.readdirSync(dir)
     console.error(`snippets.json not written. Fix these problems:\n- ${[...new Set(errors)].join('\n- ')}`);
     process.exit(1);
   }
+  generated.forEach(([file, css]) => fs.writeFileSync(file, css));
   installs.forEach(([file, html]) => fs.writeFileSync(file, html));
   fs.writeFileSync(path.join(__dirname, '..', 'snippets.json'), JSON.stringify(list, null, 2));
-  console.log(`Indexed ${list.length} snippet(s), wrote ${installs.length} install.html file(s), CSS compiles unchanged with LESS ${VERSIONS.map(v => v.replace('less-', '')).join(', ')}`);
+  console.log(`Indexed ${list.length} snippet(s), wrote ${installs.length} install.html and ${generated.length} generated snippet.css file(s); ${lessJobs.length} stylesheets compile unchanged with LESS ${VERSIONS.map(v => v.replace('less-', '')).join(', ')}`);
 })();

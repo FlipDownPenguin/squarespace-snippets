@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Button Styles demo</title>
+<!-- Stand-in for Squarespace Site Styles, using the same selector strength as Squarespace's own rules
+     (#siteWrapper.site-wrapper for padding). Not part of the snippet. -->
+<style>
+  body{margin:0;font-family:system-ui,sans-serif;background:#f6f4ef;color:#161616}
+  #siteWrapper{padding:1.25rem;display:grid;gap:.9rem}
+  .row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
+  .label{width:5.5rem;font-size:.8rem;color:#666}
+  .sqs-block-button-element{display:inline-block;text-decoration:none;font:600 15px/1.2 system-ui,sans-serif;transition:opacity .1s linear}
+  .sqs-block-button-element--small{font-size:13px}
+  .sqs-block-button-element--large{font-size:17px}
+  #siteWrapper.site-wrapper .sqs-button-element--primary,
+  #siteWrapper.site-wrapper .sqs-button-element--secondary,
+  #siteWrapper.site-wrapper .sqs-button-element--tertiary{padding:.9em 1.6em}
+  .sqs-button-element--primary{background-color:#161616;color:#fff}
+  .sqs-button-element--secondary{background-color:#e7e1d6;color:#161616}
+  .sqs-button-element--tertiary{background-color:transparent;color:#8a3b12}
+</style>
+<link rel="stylesheet" href="snippet.css">
+</head><body>
+<div id="siteWrapper" class="clearfix site-wrapper">
+  <div class="row"><span class="label">Primary</span>
+    <a href="#" class="sqs-block-button-element--small sqs-button-element--primary sqs-block-button-element">Small</a>
+    <a href="#" class="sqs-block-button-element--medium sqs-button-element--primary sqs-block-button-element">Medium</a>
+    <a href="#" class="sqs-block-button-element--large sqs-button-element--primary sqs-block-button-element">Large</a></div>
+  <div class="row"><span class="label">Secondary</span>
+    <a href="#" class="sqs-block-button-element--small sqs-button-element--secondary sqs-block-button-element">Small</a>
+    <a href="#" class="sqs-block-button-element--medium sqs-button-element--secondary sqs-block-button-element">Medium</a>
+    <a href="#" class="sqs-block-button-element--large sqs-button-element--secondary sqs-block-button-element">Large</a></div>
+  <div class="row"><span class="label">Tertiary</span>
+    <a href="#" class="sqs-block-button-element--small sqs-button-element--tertiary sqs-block-button-element">Small</a>
+    <a href="#" class="sqs-block-button-element--medium sqs-button-element--tertiary sqs-block-button-element">Medium</a>
+    <a href="#" class="sqs-block-button-element--large sqs-button-element--tertiary sqs-block-button-element">Large</a></div>
+  <div class="row"><span class="label">“plain”</span>
+    <a href="#" data-sp-style="plain" class="sqs-block-button-element--medium sqs-button-element--secondary sqs-block-button-element">Left unstyled</a></div>
+</div>
+</body></html>

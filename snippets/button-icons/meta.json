@@ -13,7 +13,7 @@
       "default": null,
       "required": true,
       "example": "Get started: arrow, Add to cart: plus, *: arrow",
-      "description": "Which Squarespace buttons get which icon: \"button text or URL: icon\", comma separated. \"*: icon\" for all others, \"none\" to skip one."
+      "description": "Which Squarespace buttons get which icon: \"button text or URL: icon\", comma separated. \"*: icon\" for all others, \"none\" to skip one. Add \"plain\" to leave a button out of button-styles."
     },
     {
       "name": "data-sp-icon",
