@@ -17,13 +17,18 @@ A library of reusable, customizable code snippets for Squarespace 7.1 sites (CSS
 - `snippets.json` — generated list of all `meta.json` files. Run `npm install` once, then `npm run build` (same as `node scripts/build-index.js`) after adding or editing a snippet; it also regenerates every `install.html`. It refuses to write if `options` don't match the snippet files (unknown names, CSS defaults that differ, `:root` variables left out), or if any `snippet.css` fails the LESS check (rule 9).
 - `scripts/less-check.js` — compiles each `snippet.css` with LESS 1.3.3, 1.4.2, 1.7.5 and 2.7.3 (dev dependencies in `package.json`). Squarespace doesn't publish its version, so the build checks a range and fails if any version errors or changes a value.
 - `_template/` — copy this to start a new snippet.
+- Configurator snippets (e.g. `button-styles`) also have:
+  - `generator.js` — UMD module: `generate(config)` returns the CSS; also exports `defaults`, `presets` and `samples()`. Used by `configurator.html` in the browser and by the build in Node. The build writes `snippet.css` from `generate(defaults)` (**generated, don't edit**) and compiles every `samples()` output with old LESS.
+  - `configurator.html` — controls, live preview (Squarespace-style markup inside `#siteWrapper`, with preview-only colors), and Copy CSS. Named in `meta.json` as `"configurator"`; the gallery shows a Configure link.
 
 ## Rules for every snippet
 1. **Prefix everything** with `sp-` (classes, IDs, CSS variables, data attributes) so nothing collides with Squarespace.
 2. **Customize via CSS variables**, declared on `:root` or the snippet's root class with sensible defaults. Never hardcode colors, fonts, sizes, or radii. Example: `--sp-accent`.
+   - Exception: **configurator snippets** (with `generator.js` + `configurator.html`) output plain CSS with the chosen values written in, and no `var()`. Their `snippet.css` is generated from the generator's defaults.
 3. **Opt-in activation**: snippets apply only to elements the user marks (a class or `data-sp-*` attribute), never globally to all buttons/menus/lists. Per-element choices follow one pattern:
    - Markup the user writes (Code Blocks): a `data-sp-*` attribute on the element itself, e.g. `data-sp-icon="arrow"`.
    - Elements Squarespace generates (button blocks, header nav), which can't take attributes: the snippet's JS reads a `data-sp-*` attribute on its own `<script>` tag, e.g. `<script data-sp-buttons="Get started: arrow">`. Entries are comma separated, matched by visible text or URL, not case sensitive; `*` means "all others". The JS then sets the per-element attribute, so the CSS only ever reads `data-sp-*` on the element.
+   - **Intentionally global snippets** are allowed when restyling every element of a Squarespace type is the point (e.g. `button-styles` restyles all Primary/Secondary/Tertiary buttons). They must set `"scope": "global"` in `meta.json`, say so in the README, and skip any element with `data-sp-style="plain"`. For buttons, the button-icons script sets that per button: `data-sp-buttons="Get started: plain"` (or `arrow plain`). The build rejects global snippets whose CSS doesn't skip `plain`.
 4. **Target Squarespace 7.1** (Fluid Engine). Prefer stable hooks (`.sqs-block-button-element`, `[data-section-id]`, `header`) and note any Squarespace selectors a snippet depends on in its README so they are easy to re-check.
 5. **JS**: vanilla only, wrapped in an IIFE, no dependencies, safe to run twice, and re-initialize on Squarespace's `mercury:load` event and `DOMContentLoaded`. Respect `prefers-reduced-motion`.
 6. **Responsive and accessible**: works at mobile width, keyboard focus visible, correct ARIA where relevant.

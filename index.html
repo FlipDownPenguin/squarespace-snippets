@@ -46,6 +46,7 @@
         <div class="btns"></div></div>`;
       const b = c.querySelector('.btns');
       m.copy.forEach(c => { const x = document.createElement('button'); x.textContent = c.label; x.onclick = () => copy(m.slug, c.file, x); b.append(x); });
+      if (m.configurator) { const k = document.createElement('a'); k.className = 'btn'; k.href = `snippets/${m.slug}/${m.configurator}`; k.textContent = 'Configure'; b.append(k); }
       const d = document.createElement('a'); d.className = 'btn'; d.style.cssText = 'background:#fff;color:#161616'; d.href = `snippets/${m.slug}/demo.html`; d.textContent = 'Full demo'; b.append(d);
       grid.append(c);
     });

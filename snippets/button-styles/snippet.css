@@ -1,0 +1,106 @@
+/* Button Styles (sp-button-styles), made with the button-styles configurator. Paste into Custom CSS.
+   Sizes: Site Styles
+   Corner radius: Site Styles
+   Marks: 6px x 1px. Tint: 10%. Speed: 300ms ease.
+   Primary: hover Fade (tint).
+   Secondary: hairline border, corner marks; hover Fade (tint).
+   Tertiary: hover Underline grow.
+   Skips buttons marked "plain" by the button-icons script. */
+
+body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--primary:not([data-sp-style="plain"]) {
+  position: relative;
+  isolation: isolate;
+}
+body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--primary:not([data-sp-style="plain"])::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  border: 0;
+  border-radius: inherit;
+  clip-path: none;
+  transform: none;
+  pointer-events: none;
+  opacity: 0.1;
+  box-shadow: none;
+  background-color: transparent;
+  background-image: none;
+  transition: background-color 0.3s ease;
+}
+@media (hover: hover) {
+  body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--primary:not([data-sp-style="plain"]):hover::before {
+    background-color: currentColor;
+  }
+}
+body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--primary:not([data-sp-style="plain"]):focus-visible::before {
+  background-color: currentColor;
+}
+
+#siteWrapper .sqs-block-button-element.sqs-button-element--secondary:not([data-sp-style="plain"]) {
+  background-image: linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  background-position: left top, left top, right top, right top, left bottom, left bottom, right bottom, right bottom;
+  background-size: 6px 1px, 1px 6px, 6px 1px, 1px 6px, 6px 1px, 1px 6px, 6px 1px, 1px 6px;
+}
+body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--secondary:not([data-sp-style="plain"]) {
+  position: relative;
+  isolation: isolate;
+}
+body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--secondary:not([data-sp-style="plain"])::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  border: 0;
+  border-radius: inherit;
+  clip-path: none;
+  transform: none;
+  pointer-events: none;
+  opacity: 0.1;
+  box-shadow: inset 0 0 0 1px currentColor;
+  background-color: transparent;
+  background-image: none;
+  transition: background-color 0.3s ease;
+}
+@media (hover: hover) {
+  body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--secondary:not([data-sp-style="plain"]):hover::before {
+    background-color: currentColor;
+  }
+}
+body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--secondary:not([data-sp-style="plain"]):focus-visible::before {
+  background-color: currentColor;
+}
+
+body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--tertiary:not([data-sp-style="plain"]) {
+  transition: background-size 0.3s ease !important;
+}
+body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--tertiary:not([data-sp-style="plain"]) {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  background-position: center bottom;
+  background-size: 0 1px;
+}
+@media (hover: hover) {
+  body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--tertiary:not([data-sp-style="plain"]):hover {
+    background-size: 100% 1px;
+  }
+}
+body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--tertiary:not([data-sp-style="plain"]):focus-visible {
+  background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--primary:not([data-sp-style="plain"])::before,
+  body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--secondary:not([data-sp-style="plain"])::before,
+  body:not(.tweak-global-animations-animation-type-flex) #siteWrapper .sqs-block-button-element.sqs-button-element--tertiary:not([data-sp-style="plain"]) {
+    transition: none !important;
+  }
+}

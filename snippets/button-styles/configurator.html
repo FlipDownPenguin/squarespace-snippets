@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Button Styles configurator</title>
+<style>
+  :root{--ink:#161616;--mute:#666;--line:#e3e1db;--bg:#f7f6f3}
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.4 system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+  header{padding:1rem 1.25rem .5rem}
+  header h1{margin:0;font-size:1.25rem}
+  header p{margin:.25rem 0 0;color:var(--mute)}
+  .layout{display:grid;gap:1rem;padding:0 1.25rem 2rem;grid-template-columns:1fr}
+  @media (min-width:960px){.layout{grid-template-columns:360px 1fr}.right{position:sticky;top:1rem;align-self:start}}
+  form{display:grid;gap:.75rem}
+  fieldset{margin:0;border:1px solid var(--line);border-radius:10px;background:#fff;padding:.75rem .9rem;display:grid;gap:.5rem}
+  legend{font-weight:700;padding:0 .3rem}
+  label{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+  label.check{justify-content:flex-start}
+  input[type=number]{width:5.2rem;padding:.3rem .4rem;border:1px solid var(--line);border-radius:6px;font:inherit}
+  select{padding:.3rem .4rem;border:1px solid var(--line);border-radius:6px;font:inherit;max-width:12rem}
+  input[type=color]{width:2.4rem;height:1.8rem;border:1px solid var(--line);border-radius:6px;padding:0;background:#fff}
+  .grid3{display:grid;grid-template-columns:auto repeat(3,1fr);gap:.35rem .5rem;align-items:center}
+  .grid3 input{width:100%}
+  .grid3 span{font-size:.8rem;color:var(--mute)}
+  .hint{margin:0;color:var(--mute);font-size:.8rem}
+  .warn{margin:0;padding:.4rem .5rem;border-radius:6px;background:#fff4e5;color:#7a3d00;font-size:.8rem}
+  .muted:disabled,fieldset[disabled] .muted{opacity:.45}
+  button{font:inherit;padding:.5rem .9rem;border-radius:8px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}
+  button.alt{background:#fff;color:var(--ink)}
+  :focus-visible{outline:2px solid #2b6cb0;outline-offset:2px}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .panel h2{margin:0;font-size:.95rem;padding:.6rem .9rem;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap}
+  .preview{padding:1.25rem;display:grid;gap:.9rem;background:var(--pv-page)}
+  .preview .row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
+  .preview .label{width:5.5rem;font-size:.8rem;color:var(--pv-label)}
+  textarea{width:100%;height:16rem;border:0;border-top:1px solid var(--line);padding:.75rem .9rem;font:12px/1.45 ui-monospace,Menlo,monospace;resize:vertical;background:#fbfbfa}
+  .actions{display:flex;gap:.5rem;align-items:center;padding:.6rem .9rem;flex-wrap:wrap}
+  #status{color:var(--mute);font-size:.85rem}
+</style>
+<!-- Preview-only stand-in for Squarespace Site Styles. Same selector strength as Squarespace
+     (#siteWrapper.site-wrapper for padding). Colors come from the preview color pickers. Not in the output. -->
+<style>
+  #siteWrapper .sqs-block-button-element{display:inline-block;text-decoration:none;font:600 15px/1.2 system-ui,sans-serif;transition:opacity .1s linear}
+  #siteWrapper .sqs-block-button-element--small{font-size:13px}
+  #siteWrapper .sqs-block-button-element--large{font-size:17px}
+  #siteWrapper.site-wrapper .sqs-button-element--primary,
+  #siteWrapper.site-wrapper .sqs-button-element--secondary,
+  #siteWrapper.site-wrapper .sqs-button-element--tertiary{padding:.9em 1.6em}
+  .sqs-button-element--primary{background-color:var(--pv-primary-fill);color:var(--pv-primary-text)}
+  .sqs-button-element--secondary{background-color:var(--pv-secondary-fill);color:var(--pv-secondary-text)}
+  .sqs-button-element--tertiary{background-color:var(--pv-tertiary-fill);color:var(--pv-tertiary-text)}
+</style>
+<style id="sp-output"></style>
+<style id="sp-force-hover"></style>
+</head><body>
+<header>
+  <h1>Button Styles configurator</h1>
+  <p>Choose sizes, corners and hover effects. Copy the CSS into <strong>Website → Pages → Custom CSS</strong>. Colors and fonts stay with your Site Styles.</p>
+</header>
+
+<div class="layout">
+  <form id="form" autocomplete="off">
+    <fieldset>
+      <legend>Start from</legend>
+      <label>Preset <select id="preset"><option value="">Defaults</option></select></label>
+      <button type="button" class="alt" id="apply-preset">Apply preset</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Size</legend>
+      <label class="check"><input type="checkbox" name="sizes.enabled"> Set padding and min-height (otherwise Site Styles)</label>
+      <div class="grid3" id="sizes">
+        <span></span><span>Padding Y</span><span>Padding X</span><span>Min height</span>
+      </div>
+      <p class="hint">Pixels. In Fluid Engine, buttons fill their grid cell, so vertical padding has little effect there; min height still applies.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Corner radius</legend>
+      <label class="check"><input type="checkbox" name="radius.enabled"> Set corner radius (otherwise Site Styles)</label>
+      <label>Radius (px) <input type="number" name="radius.value" min="0" max="300" step="1" class="muted"></label>
+    </fieldset>
+
+    <div id="types"></div>
+
+    <fieldset>
+      <legend>Lines, tint and motion</legend>
+      <label>Corner mark size (px) <input type="number" name="marks.size" min="1" max="40" step="1"></label>
+      <label>Line thickness (px) <input type="number" name="marks.thickness" min="1" max="6" step="1"></label>
+      <label>Tint strength (%) <input type="number" name="tint" min="1" max="100" step="1"></label>
+      <p class="hint">Corner marks and the underline use line thickness at full text color. Tint strength sets the fill/fade and the hairline border (both drawn in the text color).</p>
+      <label>Speed (ms) <input type="number" name="speed" min="0" max="2000" step="50"></label>
+      <label>Easing <select name="easing"></select></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Preview colors (not in the output)</legend>
+      <label>Page background <input type="color" data-pv="page" value="#f6f4ef"></label>
+      <label>Primary fill / text <span><input type="color" data-pv="primary-fill" value="#161616"> <input type="color" data-pv="primary-text" value="#ffffff"></span></label>
+      <label>Secondary fill / text <span><input type="color" data-pv="secondary-fill" value="#e7e1d6"> <input type="color" data-pv="secondary-text" value="#161616"></span></label>
+      <label>Tertiary fill / text <span><input type="color" data-pv="tertiary-fill" value="#f6f4ef"> <input type="color" data-pv="tertiary-text" value="#8a3b12"></span></label>
+    </fieldset>
+  </form>
+
+  <div class="right" style="display:grid;gap:1rem">
+    <section class="panel" aria-labelledby="pv-title">
+      <h2><span id="pv-title">Live preview</span>
+        <label class="check" style="font-weight:400"><input type="checkbox" id="force-hover"> Show hover state</label></h2>
+      <div id="siteWrapper" class="preview clearfix site-wrapper"></div>
+    </section>
+    <section class="panel" aria-labelledby="out-title">
+      <h2 id="out-title">Your CSS</h2>
+      <div class="actions"><button type="button" id="copy">Copy CSS</button><span id="status" role="status" aria-live="polite"></span></div>
+      <textarea id="output" readonly aria-label="Generated CSS" spellcheck="false"></textarea>
+    </section>
+  </div>
+</div>
+
+<script src="generator.js"></script>
+<script>
+(function () {
+  'use strict';
+  var G = window.spButtonStyles;
+  var form = document.getElementById('form');
+  var wrapper = document.getElementById('siteWrapper');
+  var out = document.getElementById('output');
+  var style = document.getElementById('sp-output');
+  var forceStyle = document.getElementById('sp-force-hover');
+  var label = function (s) { return s[0].toUpperCase() + s.slice(1); };
+
+  // --- Build the controls -------------------------------------------------
+  var sizes = document.getElementById('sizes');
+  G.SIZES.forEach(function (s) {
+    var html = '<span>' + label(s) + '</span>';
+    ['py', 'px', 'minHeight'].forEach(function (k) {
+      html += '<input type="number" class="muted" min="0" max="200" step="1" name="sizes.' + s + '.' + k + '" aria-label="' + label(s) + ' ' + ({ py: 'padding Y', px: 'padding X', minHeight: 'min height' })[k] + ' (px)">';
+    });
+    sizes.insertAdjacentHTML('beforeend', html);
+  });
+
+  var types = document.getElementById('types');
+  var hoverOptions = Object.keys(G.HOVERS).map(function (k) { return '<option value="' + k + '">' + G.HOVERS[k] + '</option>'; }).join('');
+  G.TYPES.forEach(function (t) {
+    types.insertAdjacentHTML('beforeend',
+      '<fieldset style="margin-bottom:.75rem"><legend>' + label(t) + ' buttons</legend>' +
+      '<label>Hover effect <select name="types.' + t + '.hover">' + hoverOptions + '</select></label>' +
+      '<label class="check"><input type="checkbox" name="types.' + t + '.marks"> Corner marks</label>' +
+      '<label class="check"><input type="checkbox" name="types.' + t + '.border"> Hairline border (tint strength)</label>' +
+      '<label class="check"><input type="checkbox" name="types.' + t + '.transparent"> Transparent fill</label>' +
+      '<p class="hint">Transparent fill shows the page behind the button: only use it if the button text color is readable on your page.</p>' +
+      '<p class="warn" id="warn-' + t + '" role="status" hidden></p>' +
+      '</fieldset>');
+  });
+
+  form.querySelector('[name=easing]').innerHTML = Object.keys(G.EASINGS).map(function (k) { return '<option value="' + k + '">' + k + '</option>'; }).join('');
+  var presetSel = document.getElementById('preset');
+  Object.keys(G.presets).forEach(function (k) { presetSel.insertAdjacentHTML('beforeend', '<option value="' + k + '">' + G.presets[k].label + '</option>'); });
+
+  // Preview buttons: same markup as Squarespace 7.1 button blocks.
+  G.TYPES.forEach(function (t) {
+    var row = '<div class="row"><span class="label">' + label(t) + '</span>';
+    G.SIZES.forEach(function (s) {
+      row += '<a href="#" class="sqs-block-button-element--' + s + ' sqs-button-element--' + t + ' sqs-block-button-element">' + label(s) + '</a>';
+    });
+    wrapper.insertAdjacentHTML('beforeend', row + '</div>');
+  });
+  wrapper.addEventListener('click', function (e) { if (e.target.closest('a')) e.preventDefault(); });
+
+  // --- Form <-> config ------------------------------------------------------
+  function get(obj, path) { return path.split('.').reduce(function (o, k) { return o && o[k]; }, obj); }
+  function set(obj, path, v) { var ks = path.split('.'), last = ks.pop(); ks.reduce(function (o, k) { return o[k] = o[k] || {}; }, obj)[last] = v; }
+
+  function fill(cfg) {
+    form.querySelectorAll('[name]').forEach(function (el) {
+      var v = get(cfg, el.name);
+      if (el.type === 'checkbox') el.checked = !!v;
+      else el.value = v;
+    });
+    update();
+  }
+
+  function read() {
+    var cfg = {};
+    form.querySelectorAll('[name]').forEach(function (el) {
+      var v = el.type === 'checkbox' ? el.checked : (el.type === 'number' ? parseFloat(el.value) : el.value);
+      set(cfg, el.name, v);
+    });
+    return G.normalize(cfg);
+  }
+
+  function update() {
+    var cfg = read();
+    var css = G.generate(cfg);
+    style.textContent = css;
+    out.value = css;
+    // Disable the inputs that only matter when their checkbox is on.
+    form.querySelectorAll('#sizes input').forEach(function (i) { i.disabled = !cfg.sizes.enabled; });
+    form.querySelector('[name="radius.value"]').disabled = !cfg.radius.enabled;
+    updateForce(css);
+    checkContrast(cfg);
+  }
+
+  // Preview-only warning: transparent fill + text color too close to the page color.
+  function lum(hex) {
+    var c = hex.replace('#', ''), ch = [0, 2, 4].map(function (i) { var v = parseInt(c.substr(i, 2), 16) / 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+    return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
+  }
+  function contrast(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  function checkContrast(cfg) {
+    var page = document.querySelector('[data-pv="page"]').value;
+    G.TYPES.forEach(function (t) {
+      var w = document.getElementById('warn-' + t);
+      var ratio = contrast(document.querySelector('[data-pv="' + t + '-text"]').value, page);
+      var bad = cfg.types[t].transparent && ratio < 3;
+      w.hidden = !bad;
+      w.textContent = bad ? label(t) + ' text is hard to read on this page color with a transparent fill (contrast ' + ratio.toFixed(1) + ':1). Turn off Transparent fill, or check your real colors in Preview colors.' : '';
+    });
+  }
+
+  // "Show hover state": a preview-only copy of the hover rules that applies without hovering
+  // (useful on touch screens). Never part of the copied CSS.
+  function updateForce(css) {
+    var on = document.getElementById('force-hover').checked;
+    forceStyle.textContent = on ? css.replace(/@media \(hover: hover\)/g, '@media all').replace(/:hover/g, '') : '';
+  }
+  document.getElementById('force-hover').addEventListener('change', function () { updateForce(out.value); });
+
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+
+  document.getElementById('apply-preset').addEventListener('click', function () {
+    var k = presetSel.value;
+    fill(k ? G.merge(G.defaults, G.presets[k].config) : G.defaults);
+    status('Applied ' + (k ? G.presets[k].label : 'defaults') + '.');
+  });
+
+  document.querySelectorAll('[data-pv]').forEach(function (el) {
+    var apply = function () {
+      wrapper.style.setProperty('--pv-' + el.getAttribute('data-pv'), el.value);
+      if (el.getAttribute('data-pv') === 'page') {
+        // Keep row labels readable on dark page colors.
+        var c = el.value.replace('#', ''), l = (parseInt(c.substr(0, 2), 16) * 299 + parseInt(c.substr(2, 2), 16) * 587 + parseInt(c.substr(4, 2), 16) * 114) / 1000;
+        wrapper.style.setProperty('--pv-label', l < 128 ? '#ddd' : '#666');
+      }
+    };
+    el.addEventListener('input', function () { apply(); checkContrast(read()); }); apply();
+  });
+
+  // --- Copy -------------------------------------------------------------------
+  var timer;
+  function status(msg) { var s = document.getElementById('status'); s.textContent = msg; clearTimeout(timer); timer = setTimeout(function () { s.textContent = ''; }, 2500); }
+  document.getElementById('copy').addEventListener('click', function () {
+    var text = out.value;
+    var done = function () { status('Copied. Paste into Website → Pages → Custom CSS.'); };
+    var fallback = function () {
+      out.focus(); out.select();
+      try { document.execCommand('copy'); done(); } catch (e) { status('Press Ctrl/Cmd+C to copy the selected CSS.'); }
+    };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+    else fallback();
+  });
+
+  fill(G.defaults);
+})();
+</script>
+</body></html>

@@ -18,6 +18,7 @@ How `data-sp-buttons` works:
 - Match by text using the words you typed in the button block, not the uppercase style some themes apply. If the text contains a comma, match by its link URL instead.
 - URLs can be a path (`/contact`) or a full link (`https://…`), and must match the button's link exactly.
 - `*: arrow` gives every other button an arrow. `Learn more: none` leaves one out.
+- `plain` leaves a button out of the [button-styles](../button-styles/README.md) snippet: `Get started: plain`, or with an icon, `Get started: arrow plain`.
 - Buttons that aren't listed stay unchanged.
 
 **Buttons you write yourself** (in a Code Block) don't need the script. Add the attribute directly:
@@ -30,7 +31,7 @@ Settings for each button:
 
 | Setting | Where | Values |
 |---|---|---|
-| `data-sp-buttons` | the `<script>` tag | `text or URL: icon`, comma separated |
+| `data-sp-buttons` | the `<script>` tag | `text or URL: icon`, comma separated; add `plain` to skip button-styles |
 | `data-sp-icon` | a button you write yourself | `arrow`, `plus`, `download`, `external` |
 
 CSS variables, set on `:root` or on one button:
