@@ -1,0 +1,118 @@
+/* Menu Dropdown — wires up every [data-sp-dropdown] on the page.
+   Safe to run twice; re-runs on DOMContentLoaded and Squarespace's mercury:load. */
+(function () {
+  'use strict';
+
+  var SEL = '[data-sp-dropdown]';
+  var count = 0;
+  var hoverQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+  function items(root) {
+    return Array.prototype.slice.call(root.querySelectorAll('.sp-dropdown__menu a[href], .sp-dropdown__menu button'));
+  }
+
+  function open(root) {
+    closeAll(root);
+    root.setAttribute('data-sp-open', '');
+    root.querySelector('.sp-dropdown__toggle').setAttribute('aria-expanded', 'true');
+  }
+
+  function close(root, focusToggle) {
+    if (!root.hasAttribute('data-sp-open')) return;
+    root.removeAttribute('data-sp-open');
+    var toggle = root.querySelector('.sp-dropdown__toggle');
+    toggle.setAttribute('aria-expanded', 'false');
+    if (focusToggle) toggle.focus();
+  }
+
+  function closeAll(except) {
+    document.querySelectorAll(SEL + '[data-sp-open]').forEach(function (r) {
+      if (r !== except) close(r, false);
+    });
+  }
+
+  function focusItem(root, index) {
+    var list = items(root);
+    if (!list.length) return;
+    list[(index + list.length) % list.length].focus();
+  }
+
+  function setup(root) {
+    if (root.hasAttribute('data-sp-ready')) return;
+    var toggle = root.querySelector('.sp-dropdown__toggle');
+    var menu = root.querySelector('.sp-dropdown__menu');
+    if (!toggle || !menu) return;
+
+    if (!menu.id) menu.id = 'sp-dropdown-menu-' + (++count) + '-' + Date.now().toString(36);
+    toggle.setAttribute('type', 'button');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-controls', menu.id);
+
+    var openedByHover = false;
+    toggle.addEventListener('click', function () {
+      // If hover just opened it, the click keeps it open instead of closing it again.
+      if (openedByHover && root.hasAttribute('data-sp-open')) { openedByHover = false; return; }
+      openedByHover = false;
+      root.hasAttribute('data-sp-open') ? close(root, false) : open(root);
+    });
+
+    root.addEventListener('keydown', function (e) {
+      var list = items(root);
+      var i = list.indexOf(document.activeElement);
+      if (e.key === 'Escape') {
+        if (root.hasAttribute('data-sp-open')) { e.preventDefault(); close(root, true); }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (!root.hasAttribute('data-sp-open')) open(root);
+        focusItem(root, i + 1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!root.hasAttribute('data-sp-open')) open(root);
+        focusItem(root, i < 0 ? -1 : i - 1);
+      } else if ((e.key === 'Home' || e.key === 'End') && i >= 0) {
+        e.preventDefault();
+        focusItem(root, e.key === 'Home' ? 0 : -1);
+      }
+    });
+
+    // Close when keyboard focus moves outside the dropdown (e.g. Tab past the last link).
+    // Clicks outside are handled by the document click listener below.
+    root.addEventListener('focusout', function (e) {
+      if (e.relatedTarget && !root.contains(e.relatedTarget)) close(root, false);
+    });
+
+    // Optional hover-to-open on mouse devices: data-sp-dropdown="hover"
+    if (root.getAttribute('data-sp-dropdown') === 'hover') {
+      var timer;
+      root.addEventListener('pointerenter', function (e) {
+        if (e.pointerType !== 'mouse' || !hoverQuery.matches) return;
+        clearTimeout(timer);
+        if (!root.hasAttribute('data-sp-open')) { open(root); openedByHover = true; }
+      });
+      root.addEventListener('pointerleave', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        timer = setTimeout(function () { openedByHover = false; close(root, false); }, 200);
+      });
+    }
+
+    root.setAttribute('data-sp-ready', '');
+  }
+
+  function init() {
+    document.querySelectorAll(SEL).forEach(setup);
+  }
+
+  // Global listeners are registered only once, even if this script runs twice.
+  if (!window.__spDropdownBound) {
+    window.__spDropdownBound = true;
+    document.addEventListener('click', function (e) {
+      document.querySelectorAll(SEL + '[data-sp-open]').forEach(function (r) {
+        if (!r.contains(e.target)) close(r, false);
+      });
+    });
+    document.addEventListener('DOMContentLoaded', init);
+    window.addEventListener('mercury:load', init);
+  }
+
+  init();
+})();

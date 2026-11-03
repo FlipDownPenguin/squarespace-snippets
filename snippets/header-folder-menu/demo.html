@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Header Folder Menu demo</title>
+<!-- Stand-in for Squarespace 7.1's own header CSS (copied from a live 7.1 site, trimmed). Not part of the snippet. -->
+<style>
+  :root{--siteBackgroundColor:#fff}
+  body{margin:0;font-family:system-ui,sans-serif;color:#161616;background:#f4f2ee;min-height:20rem}
+  .header{background:#fff;padding:1.25rem 2rem;display:flex;align-items:center;gap:2rem;border-bottom:1px solid #e3e1db}
+  .header-title{font-weight:700}
+  .header-nav-list{display:flex;gap:1.5rem}
+  .header-nav-list>div:not(.header-nav-item--folder){display:inline-flex}
+  .header-nav-item a{color:inherit;text-decoration:none}
+  .header-nav .header-nav-item--folder{position:relative}
+  .header-nav .header-nav-item--folder .header-nav-folder-content{display:none;pointer-events:none;position:absolute;top:auto;left:-1em;padding:.5em 1em;text-align:left;min-width:200px;z-index:10}
+  .header-nav .header-nav-item--folder .header-nav-folder-content .header-nav-folder-item{line-height:1.3}
+  .header-nav .header-nav-item--folder:hover .header-nav-folder-content,.header-nav .header-nav-item--folder button.header-nav-folder-title[aria-expanded='true']+.header-nav-folder-content{display:block;pointer-events:auto}
+  .header-nav-item button.header-nav-folder-title{background:none;border:none;font:inherit;color:inherit;cursor:pointer;display:inline-flex;align-items:center;padding:0}
+  :not(.header--menu-open) .header-nav-folder-content{background-color:var(--siteBackgroundColor)}
+  .note{padding:1rem 2rem;color:#666;font-size:.9rem}
+  @media (max-width:600px){.header{flex-direction:column;align-items:flex-start;gap:.75rem}.header-nav-list{flex-wrap:wrap}}
+</style>
+<link rel="stylesheet" href="snippet.css">
+</head><body>
+
+<header class="header" data-header-style="theme">
+  <div class="header-title">Studio</div>
+  <div class="header-nav"><nav class="header-nav-list">
+    <div class="header-nav-item header-nav-item--folder">
+      <button class="header-nav-folder-title" data-href="/services" aria-expanded="false" aria-controls="services">
+        <span class="header-nav-folder-title-text">Services</span>
+      </button>
+      <div class="header-nav-folder-content" id="services">
+        <div class="header-nav-folder-item"><a href="#"><span class="header-nav-folder-item-content">Design</span></a></div>
+        <div class="header-nav-folder-item"><a href="#"><span class="header-nav-folder-item-content">Development</span></a></div>
+        <div class="header-nav-folder-item"><a href="#"><span class="header-nav-folder-item-content">Consulting</span></a></div>
+      </div>
+    </div>
+    <div class="header-nav-item header-nav-item--folder">
+      <button class="header-nav-folder-title" data-href="/shop" aria-expanded="false" aria-controls="shop">
+        <span class="header-nav-folder-title-text">Shop</span>
+      </button>
+      <div class="header-nav-folder-content" id="shop">
+        <div class="header-nav-folder-item"><a href="#"><span class="header-nav-folder-item-content">New in</span></a></div>
+        <div class="header-nav-folder-item"><a href="#"><span class="header-nav-folder-item-content">Gift cards</span></a></div>
+      </div>
+    </div>
+    <div class="header-nav-item header-nav-item--folder">
+      <button class="header-nav-folder-title" data-href="/about" aria-expanded="false" aria-controls="about">
+        <span class="header-nav-folder-title-text">About (not opted in)</span>
+      </button>
+      <div class="header-nav-folder-content" id="about">
+        <div class="header-nav-folder-item"><a href="#"><span class="header-nav-folder-item-content">Team</span></a></div>
+        <div class="header-nav-folder-item"><a href="#"><span class="header-nav-folder-item-content">Press</span></a></div>
+      </div>
+    </div>
+    <div class="header-nav-item header-nav-item--collection"><a href="#">Contact</a></div>
+  </nav></div>
+</header>
+<p class="note">“Services” and “Shop” use the snippet. “About” is Squarespace’s default folder menu, for comparison.</p>
+
+<!-- Stand-in for Squarespace's own keyboard handling: Enter/Space toggle aria-expanded, Escape closes. Not part of the snippet. -->
+<script>
+  document.querySelectorAll('.header-nav-folder-title').forEach(function (b) {
+    b.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.setAttribute('aria-expanded', String(b.getAttribute('aria-expanded') !== 'true')); }
+    });
+    b.parentNode.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { b.setAttribute('aria-expanded', 'false'); b.focus(); }
+    });
+  });
+</script>
+
+<!-- The snippet: in Squarespace, paste snippet.js inside <script data-sp-folders="Services, Shop"> … </script> -->
+<script src="snippet.js" data-sp-folders="Services, /shop"></script>
+</body></html>

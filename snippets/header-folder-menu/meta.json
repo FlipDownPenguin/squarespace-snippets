@@ -1,0 +1,8 @@
+{
+  "slug": "header-folder-menu",
+  "title": "Header Folder Menu",
+  "description": "Restyle chosen header folder dropdowns with a fade, a hover close delay, and arrow-key navigation.",
+  "tags": ["navigation", "header", "menus", "dropdown"],
+  "requires": "css+js",
+  "install": "code-injection"
+}
