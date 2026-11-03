@@ -1,8 +1,29 @@
 {
   "slug": "button-icons",
   "title": "Button Icons",
-  "description": "Add an arrow, plus, download, or external-link icon to any Squarespace button.",
+  "description": "Give each button its own arrow, plus, download, or external-link icon.",
   "tags": ["buttons", "icons"],
-  "requires": "css",
-  "install": "custom-css"
+  "requires": "css+js",
+  "install": "code-injection",
+  "options": [
+    {
+      "name": "data-sp-buttons",
+      "type": "attribute",
+      "on": "<script> tag",
+      "default": null,
+      "required": true,
+      "description": "Which Squarespace buttons get which icon: \"button text or URL: icon\", comma separated. \"*: icon\" for all others, \"none\" to skip one."
+    },
+    {
+      "name": "data-sp-icon",
+      "type": "attribute",
+      "on": "a button you write in a Code Block",
+      "values": ["arrow", "plus", "download", "external"],
+      "default": null,
+      "description": "Icon for that button. Works without the script."
+    },
+    { "name": "--sp-icon-size", "type": "css-variable", "on": ":root or one button", "default": "1em", "description": "Icon size" },
+    { "name": "--sp-icon-gap", "type": "css-variable", "on": ":root or one button", "default": "0.5em", "description": "Space between text and icon" },
+    { "name": "--sp-icon-nudge", "type": "css-variable", "on": ":root or one button", "default": "0.25em", "description": "How far the icon moves on hover" }
+  ]
 }

@@ -1,6 +1,6 @@
-/* Button Icons — opt in per button with a data attribute or a class.
-   In Squarespace, add the class to the button's "Link" via a Code Block wrapper,
-   or wrap the button's section with <div class="sp-btn-icons sp-icon-arrow">.
+/* Button Icons — adds an icon after the text of any button with data-sp-icon.
+   Values: arrow | plus | download | external
+   On Squarespace button blocks, snippet.js adds data-sp-icon for you (see README).
    Customize with the variables below. */
 
 :root {
@@ -9,21 +9,14 @@
   --sp-icon-nudge: 0.25em; /* hover slide distance */
 }
 
-/* Works on every button inside a wrapper with .sp-btn-icons */
-.sp-btn-icons .sqs-block-button-element,
-.sp-btn-icons .sqs-button-element--primary,
-.sp-btn-icons .sqs-button-element--secondary,
-.sp-btn-icons .sp-btn {
+[data-sp-icon] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--sp-icon-gap);
 }
 
-.sp-btn-icons .sqs-block-button-element::after,
-.sp-btn-icons .sqs-button-element--primary::after,
-.sp-btn-icons .sqs-button-element--secondary::after,
-.sp-btn-icons .sp-btn::after {
+[data-sp-icon]::after {
   content: "";
   flex: none;
   width: var(--sp-icon-size);
@@ -34,17 +27,27 @@
   transition: transform 0.2s ease;
 }
 
-.sp-btn-icons .sqs-block-button-element:hover::after,
-.sp-btn-icons .sp-btn:hover::after {
-  transform: translateX(var(--sp-icon-nudge));
-}
+/* Hover/focus movement suits each icon's direction */
+[data-sp-icon]:hover::after,
+[data-sp-icon]:focus-visible::after { transform: var(--sp-icon-move); }
+
 @media (prefers-reduced-motion: reduce) {
-  .sp-btn-icons .sqs-block-button-element::after,
-  .sp-btn-icons .sp-btn::after { transition: none; transform: none !important; }
+  [data-sp-icon]::after { transition: none; transform: none !important; }
 }
 
-/* Icon choices: add one of these classes next to .sp-btn-icons */
-.sp-icon-arrow    { --sp-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E"); }
-.sp-icon-plus     { --sp-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E"); }
-.sp-icon-download { --sp-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4v11M7 11l5 5 5-5M5 20h14'/%3E%3C/svg%3E"); }
-.sp-icon-external { --sp-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E"); }
+[data-sp-icon="arrow"] {
+  --sp-icon-move: translateX(var(--sp-icon-nudge));
+  --sp-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E");
+}
+[data-sp-icon="plus"] {
+  --sp-icon-move: rotate(90deg);
+  --sp-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E");
+}
+[data-sp-icon="download"] {
+  --sp-icon-move: translateY(calc(var(--sp-icon-nudge) * 0.6));
+  --sp-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4v11M7 11l5 5 5-5M5 20h14'/%3E%3C/svg%3E");
+}
+[data-sp-icon="external"] {
+  --sp-icon-move: translate(calc(var(--sp-icon-nudge) * 0.6), calc(var(--sp-icon-nudge) * -0.6));
+  --sp-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E");
+}

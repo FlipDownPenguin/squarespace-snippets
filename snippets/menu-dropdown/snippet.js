@@ -95,7 +95,11 @@
       });
     }
 
+    // Hide the no-JS list instantly, so menus don't visibly fade out on page load.
+    menu.style.transition = 'none';
     root.setAttribute('data-sp-ready', '');
+    void menu.offsetHeight; // apply the hidden state before animations are restored
+    menu.style.transition = '';
   }
 
   function init() {

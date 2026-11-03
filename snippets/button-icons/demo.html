@@ -3,13 +3,23 @@
 <title>Button Icons demo</title>
 <link rel="stylesheet" href="snippet.css">
 <style>
-  body{font-family:system-ui,sans-serif;padding:2rem;display:grid;gap:1.25rem;justify-items:start}
+  body{font-family:system-ui,sans-serif;padding:1.5rem;display:grid;gap:1rem;justify-items:start}
+  /* Stand-in for Squarespace button block styles. Not part of the snippet. */
   .sqs-block-button-element{background:#111;color:#fff;padding:.9em 1.6em;text-decoration:none;border-radius:4px}
-  .demo-big{--sp-icon-size:1.3em;--sp-icon-gap:.8em}
-  .demo-color .sqs-block-button-element{background:#e4572e}
+  .demo-btn{background:#e4572e;color:#fff;padding:.9em 1.6em;text-decoration:none;border-radius:99px;--sp-icon-size:1.2em;--sp-icon-gap:.75em}
+  .demo-note{margin:0;color:#666;font-size:.85rem}
 </style></head><body>
-<div class="sp-btn-icons sp-icon-arrow"><a class="sqs-block-button-element" href="#">Get started</a></div>
-<div class="sp-btn-icons sp-icon-plus"><a class="sqs-block-button-element" href="#">Add to cart</a></div>
-<div class="sp-btn-icons sp-icon-download"><a class="sqs-block-button-element" href="#">Download PDF</a></div>
-<div class="sp-btn-icons sp-icon-external demo-color demo-big"><a class="sqs-block-button-element" href="#">Visit site (bigger icon)</a></div>
+
+<!-- Squarespace button blocks: icons come from data-sp-buttons on the script tag below -->
+<a class="sqs-block-button-element sqs-button-element--primary" href="/start">Get started</a>
+<a class="sqs-block-button-element sqs-button-element--primary" href="/cart">Add to cart</a>
+<a class="sqs-block-button-element sqs-button-element--primary" href="/files/brochure.pdf">Brochure</a>
+<a class="sqs-block-button-element sqs-button-element--primary" href="https://example.com">Visit partner</a>
+<a class="sqs-block-button-element sqs-button-element--primary" href="/about">About us (no icon)</a>
+
+<!-- Your own button in a Code Block: set the attribute directly, no JS needed -->
+<a class="demo-btn" href="#" data-sp-icon="arrow">Code Block button</a>
+<p class="demo-note">Matched by text: “Get started”, “Add to cart”. Matched by URL: the PDF and example.com links.</p>
+
+<script src="snippet.js" data-sp-buttons="Get started: arrow, add to cart: plus, /files/brochure.pdf: download, https://example.com: external"></script>
 </body></html>
