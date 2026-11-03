@@ -1,0 +1,8 @@
+{
+  "slug": "my-snippet",
+  "title": "My Snippet",
+  "description": "One-line description.",
+  "tags": [],
+  "requires": "css",
+  "install": "custom-css"
+}

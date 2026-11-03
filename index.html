@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Squarespace Snippets</title>
+<style>
+  :root{--bg:#f7f6f3;--ink:#161616;--mute:#666;--line:#e3e1db}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  header{padding:2rem 1.25rem 1rem;max-width:1100px;margin:auto}
+  h1{margin:0 0 .25rem;font-size:1.6rem}
+  header p{margin:0;color:var(--mute)}
+  .bar{max-width:1100px;margin:0 auto;padding:0 1.25rem 1rem}
+  input{width:100%;padding:.7rem .9rem;border:1px solid var(--line);border-radius:8px;font-size:1rem}
+  main{max-width:1100px;margin:auto;padding:0 1.25rem 3rem;display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+  iframe{width:100%;height:260px;border:0;border-bottom:1px solid var(--line)}
+  .body{padding:1rem}
+  .body h2{margin:0 0 .25rem;font-size:1.05rem}
+  .body p{margin:0 0 .75rem;color:var(--mute);font-size:.9rem}
+  .tags span{font-size:.75rem;background:var(--bg);padding:.15rem .5rem;border-radius:99px;margin-right:.25rem}
+  .btns{display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap}
+  button,a.btn{font:inherit;font-size:.85rem;padding:.5rem .8rem;border-radius:8px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;text-decoration:none}
+  button.alt{background:#fff;color:var(--ink)}
+</style></head><body>
+<header><h1>Squarespace Snippets</h1><p>Tap a snippet to preview it, then copy the code.</p></header>
+<div class="bar"><input id="q" placeholder="Search snippets or tags…"></div>
+<main id="grid"></main>
+<script>
+(async () => {
+  const grid = document.getElementById('grid'), q = document.getElementById('q');
+  let list = [];
+  try { list = await (await fetch('snippets.json')).json(); }
+  catch (e) { grid.textContent = 'Run: node scripts/build-index.js, and serve this folder over http (not file://).'; return; }
+  const copy = async (slug, file, btn) => {
+    const t = await (await fetch(`snippets/${slug}/${file}`)).text();
+    await navigator.clipboard.writeText(t);
+    const old = btn.textContent; btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = old, 1200);
+  };
+  const render = () => {
+    const s = q.value.toLowerCase();
+    grid.innerHTML = '';
+    list.filter(m => (m.title + m.description + m.tags.join(' ')).toLowerCase().includes(s)).forEach(m => {
+      const c = document.createElement('div'); c.className = 'card';
+      c.innerHTML = `<iframe loading="lazy" src="snippets/${m.slug}/demo.html"></iframe>
+        <div class="body"><h2>${m.title}</h2><p>${m.description}</p>
+        <div class="tags">${m.tags.map(t => `<span>${t}</span>`).join('')}</div>
+        <div class="btns"></div></div>`;
+      const b = c.querySelector('.btns');
+      m.files.forEach(f => { const x = document.createElement('button'); x.textContent = 'Copy ' + f.split('.')[1].toUpperCase(); x.onclick = () => copy(m.slug, f, x); b.append(x); });
+      const d = document.createElement('a'); d.className = 'btn'; d.style.cssText = 'background:#fff;color:#161616'; d.href = `snippets/${m.slug}/demo.html`; d.textContent = 'Full demo'; b.append(d);
+      grid.append(c);
+    });
+  };
+  q.oninput = render; render();
+})();
+</script></body></html>

@@ -1,0 +1,8 @@
+{
+  "slug": "button-icons",
+  "title": "Button Icons",
+  "description": "Add an arrow, plus, download, or external-link icon to any Squarespace button.",
+  "tags": ["buttons", "icons"],
+  "requires": "css",
+  "install": "custom-css"
+}
