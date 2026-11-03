@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Menu Dropdown demo</title>
+<link rel="stylesheet" href="snippet.css">
+<style>
+  body{font-family:system-ui,sans-serif;padding:2rem;min-height:16rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-start}
+  .demo-dark{--sp-dropdown-toggle-bg:#161616;--sp-dropdown-toggle-color:#fff;--sp-dropdown-toggle-border:0;--sp-dropdown-bg:#161616;--sp-dropdown-color:#fff;--sp-dropdown-hover-bg:#333;--sp-dropdown-accent:#e4572e}
+  .demo-right{margin-left:auto}
+</style>
+</head><body>
+
+<div class="sp-dropdown" data-sp-dropdown>
+  <button class="sp-dropdown__toggle" type="button">Services</button>
+  <ul class="sp-dropdown__menu">
+    <li><a href="#">Design</a></li>
+    <li><a href="#">Development</a></li>
+    <li><a href="#">Consulting</a></li>
+  </ul>
+</div>
+
+<div class="sp-dropdown demo-dark" data-sp-dropdown="hover">
+  <button class="sp-dropdown__toggle" type="button">Hover me</button>
+  <ul class="sp-dropdown__menu">
+    <li><a href="#">Shop</a></li>
+    <li><a href="#">Gift cards</a></li>
+    <li><a href="#">Sale</a></li>
+  </ul>
+</div>
+
+<div class="sp-dropdown demo-right" data-sp-dropdown data-sp-align="right">
+  <button class="sp-dropdown__toggle" type="button">Right aligned</button>
+  <ul class="sp-dropdown__menu">
+    <li><a href="#">Account</a></li>
+    <li><a href="#">Orders</a></li>
+    <li><a href="#">Sign out</a></li>
+  </ul>
+</div>
+
+<script src="snippet.js"></script>
+</body></html>

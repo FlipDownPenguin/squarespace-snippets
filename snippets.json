@@ -12,5 +12,39 @@
     "files": [
       "snippet.css"
     ]
+  },
+  {
+    "slug": "header-folder-menu",
+    "title": "Header Folder Menu",
+    "description": "Restyle chosen header folder dropdowns with a fade, a hover close delay, and arrow-key navigation.",
+    "tags": [
+      "navigation",
+      "header",
+      "menus",
+      "dropdown"
+    ],
+    "requires": "css+js",
+    "install": "code-injection",
+    "files": [
+      "snippet.css",
+      "snippet.js"
+    ]
+  },
+  {
+    "slug": "menu-dropdown",
+    "title": "Menu Dropdown",
+    "description": "An accessible click (or hover) dropdown of links you can drop into any Code Block.",
+    "tags": [
+      "navigation",
+      "menus",
+      "dropdown"
+    ],
+    "requires": "css+js",
+    "install": "code-block",
+    "files": [
+      "snippet.css",
+      "snippet.js",
+      "snippet.html"
+    ]
   }
 ]

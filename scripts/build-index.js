@@ -6,7 +6,7 @@ const list = fs.readdirSync(dir)
   .map(d => {
     const meta = JSON.parse(fs.readFileSync(path.join(dir, d, 'meta.json'), 'utf8'));
     const css = path.join(dir, d, 'snippet.css'), js = path.join(dir, d, 'snippet.js');
-    meta.files = ['snippet.css', 'snippet.js'].filter(f => fs.existsSync(path.join(dir, d, f)));
+    meta.files = ['snippet.css', 'snippet.js', 'snippet.html'].filter(f => fs.existsSync(path.join(dir, d, f)));
     return meta;
   });
 fs.writeFileSync(path.join(__dirname, '..', 'snippets.json'), JSON.stringify(list, null, 2));

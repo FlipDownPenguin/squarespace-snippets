@@ -1,0 +1,88 @@
+/* Header Folder Menu — restyles the desktop dropdowns of the header folders you choose.
+   Needs snippet.js with data-sp-folders="Folder title, …" on its <script> tag.
+   Nothing here applies until the script marks a folder with [data-sp-folder-menu]. */
+
+:root {
+  /* --sp-folder-bg: #fff;      Menu background. Unset = your header's background. */
+  /* --sp-folder-color: #111;   Link color. Unset = your header's link color. */
+  --sp-folder-hover-bg: rgba(127, 127, 127, 0.12);
+  --sp-folder-accent: currentColor; /* focus outline */
+  --sp-folder-radius: 8px;
+  --sp-folder-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  --sp-folder-padding: 0.4rem;
+  --sp-folder-item-padding: 0.55em 0.9em;
+  --sp-folder-item-radius: 4px;
+  --sp-folder-min-width: 200px;
+  --sp-folder-offset: 0.5rem; /* gap between folder title and menu */
+  --sp-folder-z: 1000;
+  --sp-folder-speed: 0.18s;
+  --sp-folder-close-delay: 250ms; /* how long the menu waits before closing after the mouse leaves */
+}
+
+/* Match Squarespace's own background choice for each header style */
+.header-nav-item--folder[data-sp-folder-menu] { --sp-folder-theme-bg: var(--siteBackgroundColor, #fff); }
+[data-header-style="solid"] .header-nav-item--folder[data-sp-folder-menu] { --sp-folder-theme-bg: var(--solidHeaderBackgroundColor, #fff); }
+[data-header-style="gradient"] .header-nav-item--folder[data-sp-folder-menu] { --sp-folder-theme-bg: var(--gradientHeaderBackgroundColor, #fff); }
+
+/* Closed: kept in the layout (display:block) so it can fade, but hidden and unclickable */
+.header .header-nav .header-nav-item--folder[data-sp-folder-menu] .header-nav-folder-content {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  margin-top: var(--sp-folder-offset);
+  padding: var(--sp-folder-padding);
+  min-width: var(--sp-folder-min-width);
+  background-color: var(--sp-folder-bg, var(--sp-folder-theme-bg));
+  color: var(--sp-folder-color, currentColor);
+  border-radius: var(--sp-folder-radius);
+  box-shadow: var(--sp-folder-shadow);
+  z-index: var(--sp-folder-z);
+  transform: translateY(-0.25rem);
+  transition: opacity var(--sp-folder-speed) ease,
+              transform var(--sp-folder-speed) ease,
+              visibility 0s linear var(--sp-folder-speed);
+}
+
+/* Invisible bridge over the gap so the mouse can travel from title to menu */
+.header .header-nav .header-nav-item--folder[data-sp-folder-menu] .header-nav-folder-content::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: var(--sp-folder-offset);
+}
+
+/* Open */
+.header .header-nav .header-nav-item--folder[data-sp-folder-menu][data-sp-open] .header-nav-folder-content {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+  transition-delay: 0s;
+}
+
+.header .header-nav .header-nav-item--folder[data-sp-folder-menu] .header-nav-folder-item a {
+  display: block;
+  padding: var(--sp-folder-item-padding);
+  border-radius: var(--sp-folder-item-radius);
+  color: inherit;
+}
+.header .header-nav .header-nav-item--folder[data-sp-folder-menu] .header-nav-folder-item a:hover,
+.header .header-nav .header-nav-item--folder[data-sp-folder-menu] .header-nav-folder-item a:focus-visible {
+  background-color: var(--sp-folder-hover-bg);
+}
+
+.header .header-nav .header-nav-item--folder[data-sp-folder-menu] .header-nav-folder-title:focus-visible,
+.header .header-nav .header-nav-item--folder[data-sp-folder-menu] .header-nav-folder-item a:focus-visible {
+  outline: 2px solid var(--sp-folder-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header .header-nav .header-nav-item--folder[data-sp-folder-menu] .header-nav-folder-content {
+    transition: none;
+    transform: none;
+  }
+}

@@ -1,0 +1,115 @@
+/* Menu Dropdown — an accessible dropdown of links for a Code Block.
+   Opt in with <div class="sp-dropdown" data-sp-dropdown>. Needs snippet.js.
+   Customize with the variables below. */
+
+:root {
+  --sp-dropdown-font: inherit;
+  --sp-dropdown-font-size: 1rem;
+  --sp-dropdown-toggle-bg: transparent;
+  --sp-dropdown-toggle-color: currentColor;
+  --sp-dropdown-toggle-padding: 0.6em 1em;
+  --sp-dropdown-toggle-radius: 6px;
+  --sp-dropdown-toggle-border: 1px solid currentColor;
+  --sp-dropdown-bg: #fff;
+  --sp-dropdown-color: #161616;
+  --sp-dropdown-hover-bg: #f2f2f2;
+  --sp-dropdown-accent: #161616; /* focus outline */
+  --sp-dropdown-radius: 8px;
+  --sp-dropdown-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  --sp-dropdown-width: 14rem;
+  --sp-dropdown-offset: 0.4rem; /* gap between toggle and menu */
+  --sp-dropdown-item-padding: 0.6em 1em;
+  --sp-dropdown-z: 1000;
+  --sp-dropdown-speed: 0.18s;
+}
+
+.sp-dropdown {
+  position: relative;
+  display: inline-block;
+  font-family: var(--sp-dropdown-font);
+  font-size: var(--sp-dropdown-font-size);
+}
+
+.sp-dropdown__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0;
+  padding: var(--sp-dropdown-toggle-padding);
+  font: inherit;
+  color: var(--sp-dropdown-toggle-color);
+  background: var(--sp-dropdown-toggle-bg);
+  border: var(--sp-dropdown-toggle-border);
+  border-radius: var(--sp-dropdown-toggle-radius);
+  cursor: pointer;
+}
+
+/* Chevron */
+.sp-dropdown__toggle::after {
+  content: "";
+  width: 0.45em;
+  height: 0.45em;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-25%) rotate(45deg);
+  transition: transform var(--sp-dropdown-speed) ease;
+}
+.sp-dropdown[data-sp-open] .sp-dropdown__toggle::after {
+  transform: translateY(25%) rotate(-135deg);
+}
+
+.sp-dropdown__menu {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem 0;
+  min-width: var(--sp-dropdown-width);
+  max-width: calc(100vw - 2rem);
+  background: var(--sp-dropdown-bg);
+  color: var(--sp-dropdown-color);
+  border-radius: var(--sp-dropdown-radius);
+  box-shadow: var(--sp-dropdown-shadow);
+}
+
+/* Only hide/position the menu once JS is running; without JS it shows as a plain list. */
+.sp-dropdown[data-sp-ready] .sp-dropdown__menu {
+  position: absolute;
+  top: calc(100% + var(--sp-dropdown-offset));
+  left: 0;
+  z-index: var(--sp-dropdown-z);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-0.25rem);
+  transition: opacity var(--sp-dropdown-speed) ease,
+              transform var(--sp-dropdown-speed) ease,
+              visibility 0s linear var(--sp-dropdown-speed);
+}
+.sp-dropdown[data-sp-align="right"] .sp-dropdown__menu { left: auto; right: 0; }
+.sp-dropdown[data-sp-ready][data-sp-open] .sp-dropdown__menu {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+.sp-dropdown__menu a {
+  display: block;
+  padding: var(--sp-dropdown-item-padding);
+  color: inherit;
+  text-decoration: none;
+}
+.sp-dropdown__menu a:hover,
+.sp-dropdown__menu a:focus-visible {
+  background: var(--sp-dropdown-hover-bg);
+}
+
+.sp-dropdown__toggle:focus-visible,
+.sp-dropdown__menu a:focus-visible {
+  outline: 2px solid var(--sp-dropdown-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-dropdown__toggle::after,
+  .sp-dropdown[data-sp-ready] .sp-dropdown__menu { transition: none; }
+  .sp-dropdown[data-sp-ready] .sp-dropdown__menu { transform: none; }
+}
