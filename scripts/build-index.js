@@ -4,7 +4,21 @@ const fs = require('fs'), path = require('path');
 const dir = path.join(__dirname, '..', 'snippets');
 const FILES = ['snippet.css', 'snippet.js', 'snippet.html'];
 const TYPES = ['attribute', 'css-variable'];
+const SCRIPT_TAG = '<script> tag';
 const errors = [];
+
+const attr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+
+// install.html: the complete <script> block to paste into Code Injection, with the
+// snippet's <script>-tag settings already filled in with their example values.
+function installHtml(slug, meta, js) {
+  if (/<\/script/i.test(js)) { errors.push(`${slug}: snippet.js contains "</script", which would end the script block early`); return null; }
+  const settings = meta.options.filter(o => o.on === SCRIPT_TAG && o.example);
+  const attrs = settings.map(o => ` ${o.name}="${attr(o.example)}"`).join('');
+  const notes = settings.map(o => `\n     ${o.name}: ${o.description.replace(/--/g, '-')}`).join('');
+  return `<!-- ${meta.title}: paste into Settings → Advanced → Code Injection → Footer.${notes ? notes + '\n     Change the example value on the script tag below to match your site.' : ''} -->\n` +
+    `<script${attrs}>\n${js.trimEnd()}\n</script>\n`;
+}
 
 const squash = s => String(s).replace(/\s+/g, ' ').trim();
 const escape = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -33,6 +47,12 @@ function checkOptions(slug, meta, sources) {
     }
   });
 
+  meta.options.filter(o => o.on === SCRIPT_TAG).forEach(o => {
+    if (o.type !== 'attribute') fail(`${o.name}: options on the ${SCRIPT_TAG} must be attributes`);
+    if (!o.example) fail(`${o.name}: needs an "example" value for install.html`);
+  });
+  if (meta.options.some(o => o.on === SCRIPT_TAG) && !sources['snippet.js']) fail(`has ${SCRIPT_TAG} options but no snippet.js`);
+
   // Every variable declared on :root must be documented.
   const root = /:root\s*\{([^}]*)\}/.exec(css);
   if (root) for (const m of root[1].matchAll(/(--sp-[\w-]+)\s*:/g)) {
@@ -40,6 +60,7 @@ function checkOptions(slug, meta, sources) {
   }
 }
 
+const installs = [];
 const list = fs.readdirSync(dir)
   .filter(d => fs.existsSync(path.join(dir, d, 'meta.json')))
   .map(d => {
@@ -47,6 +68,16 @@ const list = fs.readdirSync(dir)
     meta.files = FILES.filter(f => fs.existsSync(path.join(dir, d, f)));
     const sources = Object.fromEntries(meta.files.map(f => [f, fs.readFileSync(path.join(dir, d, f), 'utf8')]));
     checkOptions(d, meta, sources);
+
+    // What the gallery's copy buttons copy. JS is copied as the ready-to-paste install.html.
+    let install = null;
+    if (sources['snippet.js'] && Array.isArray(meta.options)) install = installHtml(d, meta, sources['snippet.js']);
+    if (install) installs.push([path.join(dir, d, 'install.html'), install]);
+    meta.copy = [
+      sources['snippet.css'] && { file: 'snippet.css', label: 'Copy CSS' },
+      install && { file: 'install.html', label: 'Copy JS' },
+      sources['snippet.html'] && { file: 'snippet.html', label: 'Copy HTML' },
+    ].filter(Boolean);
     return meta;
   });
 
@@ -54,5 +85,6 @@ if (errors.length) {
   console.error(`snippets.json not written. Fix these meta.json "options" problems:\n- ${errors.join('\n- ')}`);
   process.exit(1);
 }
+installs.forEach(([file, html]) => fs.writeFileSync(file, html));
 fs.writeFileSync(path.join(__dirname, '..', 'snippets.json'), JSON.stringify(list, null, 2));
-console.log(`Indexed ${list.length} snippet(s)`);
+console.log(`Indexed ${list.length} snippet(s), wrote ${installs.length} install.html file(s)`);

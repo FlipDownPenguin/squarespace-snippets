@@ -12,6 +12,7 @@
       "on": "<script> tag",
       "default": null,
       "required": true,
+      "example": "Get started: arrow, Add to cart: plus, *: arrow",
       "description": "Which Squarespace buttons get which icon: \"button text or URL: icon\", comma separated. \"*: icon\" for all others, \"none\" to skip one."
     },
     {

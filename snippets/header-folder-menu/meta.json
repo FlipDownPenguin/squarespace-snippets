@@ -12,6 +12,7 @@
       "on": "<script> tag",
       "default": null,
       "required": true,
+      "example": "Services, Shop",
       "description": "Which header folders to upgrade: folder titles or URL slugs, comma separated, or \"*\" for all."
     },
     { "name": "--sp-folder-bg", "type": "css-variable", "on": ":root", "default": null, "description": "Menu background. Unset = your header's background." },

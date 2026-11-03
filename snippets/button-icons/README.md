@@ -4,13 +4,14 @@ Adds an icon (arrow, plus, download, external link) after a button's text, chose
 
 ## Install
 1. Paste `snippet.css` into **Website → Pages → Custom CSS**.
-2. Choose icons for your **Squarespace button blocks**. Go to **Settings → Advanced → Code Injection → Footer** (needs a Core plan or higher) and paste `snippet.js` inside this tag:
+2. Paste `install.html` (the gallery's **Copy JS** button) into **Settings → Advanced → Code Injection → Footer** (needs a Core plan or higher). It's the complete script block, with the setting already on the tag:
    ```html
-   <script data-sp-buttons="Get started: arrow, Add to cart: plus, /brochure.pdf: download, https://partner.com: external">
-     /* paste snippet.js here */
+   <script data-sp-buttons="Get started: arrow, Add to cart: plus, *: arrow">
+     …
    </script>
    ```
-3. Save and view the site in a new tab. The script doesn't run inside the editor.
+3. Change the `data-sp-buttons` value to your own buttons, e.g. `"Get started: arrow, /brochure.pdf: download, https://partner.com: external"`.
+4. Save and view the site in a new tab. The script doesn't run inside the editor.
 
 How `data-sp-buttons` works:
 - Each entry is `button text: icon` or `link URL: icon`, separated by commas. Matching is not case sensitive.

@@ -1,5 +1,6 @@
 /* Button Icons — gives Squarespace button blocks their own icon.
-   Paste inside: <script data-sp-buttons="Get started: arrow, /brochure.pdf: download"> … </script>
+   Install with install.html: the ready-to-paste script block with data-sp-buttons on it.
+   Example: data-sp-buttons="Get started: arrow, /brochure.pdf: download"
    Each entry is "button text or link URL: icon", comma separated. Not case sensitive.
    Icons: arrow, plus, download, external, or none. "*: arrow" applies to every other button.
    Safe to run twice; re-runs on DOMContentLoaded and Squarespace's mercury:load. */

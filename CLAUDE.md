@@ -7,12 +7,14 @@ A library of reusable, customizable code snippets for Squarespace 7.1 sites (CSS
   - `snippet.css`, `snippet.js` (optional), `snippet.html` (optional markup to paste in a Code Block)
   - `demo.html` — standalone preview (links the snippet files with relative paths)
   - `README.md` — what it does, install steps, customization options
+  - `install.html` — **generated, don't edit**. For snippets with JS: the complete `<script>` block to paste into Code Injection, with `<script> tag` options filled in from their `example`. The gallery's "Copy JS" button copies this.
   - `meta.json` — `{ "slug", "title", "description", "tags": [], "requires": "css|css+js", "install": "code-injection|code-block|custom-css", "options": [] }`
     - `options` lists every setting a user can change, one object each:
-      `{ "name", "type": "attribute|css-variable", "on": "where it goes", "values": [] (optional), "default": value or null, "required": true (optional), "description" }`
+      `{ "name", "type": "attribute|css-variable", "on": "where it goes", "values": [] (optional), "default": value or null, "required": true (optional), "example": "…" (required when "on" is "<script> tag"), "description" }`
+    - `snippet.js` must not contain `</script` anywhere (even in comments), or `install.html` would break; the build checks this.
     - Internal state attributes (e.g. `data-sp-open`, `data-sp-ready`) are not options.
 - `index.html` — gallery. Reads `snippets.json` and shows every demo in an iframe with a copy-code button.
-- `snippets.json` — generated list of all `meta.json` files. Run `node scripts/build-index.js` after adding or editing a snippet. It refuses to write if `options` don't match the snippet files (unknown names, CSS defaults that differ, `:root` variables left out).
+- `snippets.json` — generated list of all `meta.json` files. Run `node scripts/build-index.js` after adding or editing a snippet; it also regenerates every `install.html`. It refuses to write if `options` don't match the snippet files (unknown names, CSS defaults that differ, `:root` variables left out).
 - `_template/` — copy this to start a new snippet.
 
 ## Rules for every snippet
