@@ -10,7 +10,7 @@ Keyboard support:
 
 ## Install
 1. Paste `snippet.css` into **Website → Pages → Custom CSS**, or into **Settings → Advanced → Code Injection → Header** inside `<style>…</style>`.
-2. Paste `snippet.js` into **Code Injection → Footer** inside `<script>…</script>`. Code Injection needs a Core plan or higher.
+2. Paste `install.html` (the gallery's **Copy JS** button) into **Settings → Advanced → Code Injection → Footer**. It's the complete `<script>` block. Code Injection needs a Core plan or higher.
 3. Add a **Code Block** where you want the dropdown and paste `snippet.html`. Edit the button label and links.
 
 Options, set on the `.sp-dropdown` element:

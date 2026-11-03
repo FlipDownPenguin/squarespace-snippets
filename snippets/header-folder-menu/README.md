@@ -11,13 +11,14 @@ Squarespace's own keyboard handling (Enter, Space, Esc and `aria-expanded`) is k
 
 ## Install
 1. Paste `snippet.css` into **Website → Pages → Custom CSS**.
-2. Go to **Settings → Advanced → Code Injection → Footer** (needs a Core plan or higher) and paste `snippet.js` inside this tag, with your folder names:
+2. Paste `install.html` (the gallery's **Copy JS** button) into **Settings → Advanced → Code Injection → Footer** (needs a Core plan or higher). It's the complete script block, with the setting already on the tag:
    ```html
    <script data-sp-folders="Services, Shop">
-     /* paste snippet.js here */
+     …
    </script>
    ```
-3. Save and view the site in a new tab. Folder menus often don't update inside the editor preview.
+3. Change the `data-sp-folders` value to your own folder names.
+4. Save and view the site in a new tab. Folder menus often don't update inside the editor preview.
 
 `data-sp-folders` takes folder titles or URL slugs, comma separated, not case sensitive. For example, `"Services, /shop"`. Use `"*"` for every folder. Without this attribute the snippet does nothing.
 

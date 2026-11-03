@@ -16,6 +16,7 @@
         "on": "<script> tag",
         "default": null,
         "required": true,
+        "example": "Get started: arrow, Add to cart: plus, *: arrow",
         "description": "Which Squarespace buttons get which icon: \"button text or URL: icon\", comma separated. \"*: icon\" for all others, \"none\" to skip one."
       },
       {
@@ -56,6 +57,16 @@
     "files": [
       "snippet.css",
       "snippet.js"
+    ],
+    "copy": [
+      {
+        "file": "snippet.css",
+        "label": "Copy CSS"
+      },
+      {
+        "file": "install.html",
+        "label": "Copy JS"
+      }
     ]
   },
   {
@@ -77,6 +88,7 @@
         "on": "<script> tag",
         "default": null,
         "required": true,
+        "example": "Services, Shop",
         "description": "Which header folders to upgrade: folder titles or URL slugs, comma separated, or \"*\" for all."
       },
       {
@@ -181,6 +193,16 @@
     "files": [
       "snippet.css",
       "snippet.js"
+    ],
+    "copy": [
+      {
+        "file": "snippet.css",
+        "label": "Copy CSS"
+      },
+      {
+        "file": "install.html",
+        "label": "Copy JS"
+      }
     ]
   },
   {
@@ -349,6 +371,20 @@
       "snippet.css",
       "snippet.js",
       "snippet.html"
+    ],
+    "copy": [
+      {
+        "file": "snippet.css",
+        "label": "Copy CSS"
+      },
+      {
+        "file": "install.html",
+        "label": "Copy JS"
+      },
+      {
+        "file": "snippet.html",
+        "label": "Copy HTML"
+      }
     ]
   }
 ]

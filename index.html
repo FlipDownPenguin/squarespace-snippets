@@ -45,7 +45,7 @@
         <div class="tags">${m.tags.map(t => `<span>${t}</span>`).join('')}</div>
         <div class="btns"></div></div>`;
       const b = c.querySelector('.btns');
-      m.files.forEach(f => { const x = document.createElement('button'); x.textContent = 'Copy ' + f.split('.')[1].toUpperCase(); x.onclick = () => copy(m.slug, f, x); b.append(x); });
+      m.copy.forEach(c => { const x = document.createElement('button'); x.textContent = c.label; x.onclick = () => copy(m.slug, c.file, x); b.append(x); });
       const d = document.createElement('a'); d.className = 'btn'; d.style.cssText = 'background:#fff;color:#161616'; d.href = `snippets/${m.slug}/demo.html`; d.textContent = 'Full demo'; b.append(d);
       grid.append(c);
     });

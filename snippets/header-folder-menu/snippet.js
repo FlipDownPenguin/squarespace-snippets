@@ -1,5 +1,6 @@
 /* Header Folder Menu — opt-in upgrades for Squarespace 7.1 header folder dropdowns.
-   Paste inside: <script data-sp-folders="Services, Shop"> … </script>
+   Install with install.html: the ready-to-paste script block with data-sp-folders on it.
+   Example: data-sp-folders="Services, Shop"
    Use folder titles or URL slugs, comma separated, or "*" for every folder.
    Safe to run twice; re-runs on DOMContentLoaded and Squarespace's mercury:load. */
 (function () {
